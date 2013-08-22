@@ -1091,10 +1091,12 @@ interface(`logging_append_all_inherited_logs',`
 interface(`logging_read_all_logs',`
 	gen_require(`
 		attribute logfile;
+		type var_log_t;
 	')
 
 	files_search_var($1)
 	allow $1 logfile:dir list_dir_perms;
+	allow $1 var_log_t:lnk_file read_lnk_file_perms;
 	read_files_pattern($1, logfile, logfile)
 ')
 
@@ -1175,6 +1177,7 @@ interface(`logging_manage_generic_log_dirs',`
 
 	files_search_var($1)
 	allow $1 var_log_t:dir manage_dir_perms;
+	allow $1 var_log_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -1195,6 +1198,7 @@ interface(`logging_relabel_generic_log_dirs',`
 
 	files_search_var($1)
 	allow $1 var_log_t:dir relabel_dir_perms;
+	allow $1 var_log_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -1215,6 +1219,7 @@ interface(`logging_read_generic_logs',`
 
 	files_search_var($1)
 	allow $1 var_log_t:dir list_dir_perms;
+	allow $1 var_log_t:lnk_file read_lnk_file_perms;
 	read_files_pattern($1, var_log_t, var_log_t)
 ')
 
@@ -1316,6 +1321,7 @@ interface(`logging_manage_generic_logs',`
 
 	files_search_var($1)
 	manage_files_pattern($1, var_log_t, var_log_t)
+	allow $1 var_log_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -1334,6 +1340,7 @@ interface(`logging_watch_generic_logs_dir',`
 	')
 
 	allow $1 var_log_t:dir watch;
+	allow $1 var_log_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
