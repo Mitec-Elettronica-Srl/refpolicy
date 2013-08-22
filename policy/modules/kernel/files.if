@@ -4970,6 +4970,7 @@ interface(`files_search_tmp',`
 	')
 
 	allow $1 tmp_t:dir search_dir_perms;
+	allow $1 tmp_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -5006,6 +5007,7 @@ interface(`files_list_tmp',`
 	')
 
 	allow $1 tmp_t:dir list_dir_perms;
+	allow $1 tmp_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -5042,6 +5044,7 @@ interface(`files_delete_tmp_dir_entry',`
 	')
 
 	allow $1 tmp_t:dir del_entry_dir_perms;
+	allow $1 tmp_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -5060,6 +5063,7 @@ interface(`files_read_generic_tmp_files',`
 	')
 
 	read_files_pattern($1, tmp_t, tmp_t)
+	allow $1 tmp_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -5078,6 +5082,7 @@ interface(`files_manage_generic_tmp_dirs',`
 	')
 
 	manage_dirs_pattern($1, tmp_t, tmp_t)
+	allow $1 tmp_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -5114,6 +5119,7 @@ interface(`files_manage_generic_tmp_files',`
 	')
 
 	manage_files_pattern($1, tmp_t, tmp_t)
+	allow $1 tmp_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -5150,6 +5156,7 @@ interface(`files_rw_generic_tmp_sockets',`
 	')
 
 	rw_sock_files_pattern($1, tmp_t, tmp_t)
+	allow $1 tmp_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
@@ -5357,6 +5364,7 @@ interface(`files_tmp_filetrans',`
 	')
 
 	filetrans_pattern($1, tmp_t, $2, $3, $4)
+	allow $1 tmp_t:lnk_file read_lnk_file_perms;
 ')
 
 ########################################
