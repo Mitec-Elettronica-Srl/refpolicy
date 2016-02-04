@@ -10,7 +10,7 @@ policy_module(systemd)
 ## Enable support for systemd-tmpfiles to manage all non-security files.
 ## </p>
 ## </desc>
-gen_tunable(systemd_tmpfiles_manage_all, false)
+gen_tunable(systemd_tmpfiles_manage_all, true)
 
 ## <desc>
 ## <p>
