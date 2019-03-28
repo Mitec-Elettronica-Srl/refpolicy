@@ -33,3 +33,9 @@
 # not for refpolicy intern, but for /var/run using applications,
 # like systemd tmpfiles or systemd socket configurations
 /var/run /run
+
+# volatile aliases
+# ensure the policy applied to the base filesystem objects are reflected in the
+# volatile hierarchy.
+/var/volatile/log /var/log
+/var/volatile/tmp /var/tmp
