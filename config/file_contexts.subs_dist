@@ -39,3 +39,9 @@
 # volatile hierarchy.
 /var/volatile/log /var/log
 /var/volatile/tmp /var/tmp
+
+# busybox aliases
+# quickly match up the busybox built-in tree to the base filesystem tree
+/usr/lib/busybox/bin /usr/bin
+/usr/lib/busybox/sbin /usr/sbin
+/usr/lib/busybox/usr /usr
