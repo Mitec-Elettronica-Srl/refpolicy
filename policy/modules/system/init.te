@@ -669,13 +669,15 @@ ifdef(`init_systemd',`
 		unconfined_write_keys(init_t)
 	')
 ',`
-	tunable_policy(`init_upstart',`
-		corecmd_shell_domtrans(init_t, initrc_t)
+	optional_policy(`
+		tunable_policy(`init_upstart',`
+			corecmd_shell_domtrans(init_t, initrc_t)
 	',`
-		# Run the shell in the sysadm role for single-user mode.
-		# causes problems with upstart
-		ifndef(`distro_debian',`
-			sysadm_shell_domtrans(init_t)
+			# Run the shell in the sysadm role for single-user mode.
+			# causes problems with upstart
+			ifndef(`distro_debian',`
+				sysadm_shell_domtrans(init_t)
+			')
 		')
 	')
 ')
