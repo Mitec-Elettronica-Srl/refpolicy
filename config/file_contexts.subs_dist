@@ -45,3 +45,7 @@
 /usr/lib/busybox/bin /usr/bin
 /usr/lib/busybox/sbin /usr/sbin
 /usr/lib/busybox/usr /usr
+
+# The genhomedircon.py will expand /root home directory to /home/root
+# Add an aliase for it
+/root /home/root
