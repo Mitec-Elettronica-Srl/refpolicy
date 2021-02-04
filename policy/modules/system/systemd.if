@@ -269,6 +269,37 @@ template(`systemd_role_template',`
 
 ######################################
 ## <summary>
+##	Admin role for systemd --user
+## </summary>
+## <param name="prefix">
+##	<summary>
+##	Prefix for generated types
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	The admin role.
+##	</summary>
+## </param>
+## <param name="userdomain">
+##	<summary>
+##	The amdin domain for the role.
+##	</summary>
+## </param>
+#
+template(`systemd_admin_role_extra',`
+	gen_require(`
+		type $1_systemd_t;
+	')
+
+	allow $1_systemd_t self:process setsched;
+	allow $1_systemd_t $3:process noatsecure;
+	allow $1_systemd_t self:capability { mknod sys_admin };
+	allow $1_systemd_t self:capability2 { bpf perfmon };
+')
+
+######################################
+## <summary>
 ##   Allow the specified domain to be started as a daemon by the
 ##   specified systemd user instance.
 ## </summary>

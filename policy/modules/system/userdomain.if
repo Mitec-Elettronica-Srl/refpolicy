@@ -1480,6 +1480,10 @@ template(`userdom_admin_user_template',`
 	optional_policy(`
 		userhelper_exec($1_t)
 	')
+
+	optional_policy(`
+		systemd_admin_role_extra($1, $1_r, $1_t)
+	')
 ')
 
 ########################################
