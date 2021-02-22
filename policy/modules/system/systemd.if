@@ -266,6 +266,9 @@ template(`systemd_role_template',`
 		xserver_read_xdm_state($1_systemd_t)
 		xserver_use_user_fonts($1_systemd_t)
 	')
+
+	mls_file_read_all_levels($1_systemd_t)
+	mls_file_write_all_levels($1_systemd_t)
 ')
 
 ######################################
