@@ -27,6 +27,10 @@ type auditd_log_t;
 files_security_file(auditd_log_t)
 files_security_mountpoint(auditd_log_t)
 
+optional_policy(`
+	systemd_tmpfilesd_managed(auditd_log_t)
+')
+
 type audit_spool_t;
 files_security_file(audit_spool_t)
 files_security_mountpoint(audit_spool_t)
