@@ -406,6 +406,8 @@ optional_policy(`
 # sys_admin for the integrated klog of syslog-ng and metalog
 # sys_nice for rsyslog
 allow syslogd_t self:capability { chown dac_override fsetid setgid setuid sys_admin sys_nice sys_resource sys_tty_config };
+# Rsyslog configures with --enable-libcap-ng
+allow syslogd_t self:capability setpcap;
 dontaudit syslogd_t self:capability { sys_ptrace };
 dontaudit syslogd_t self:cap_userns { kill sys_ptrace };
 # setpgid for metalog
