@@ -75,6 +75,7 @@ fs_getattr_cgroup(getty_t)
 fs_search_cgroup_dirs(getty_t)
 # for error condition handling
 fs_getattr_xattr_fs(getty_t)
+fs_list_tmpfs(getty_t)
 
 mcs_process_set_categories(getty_t)
 
