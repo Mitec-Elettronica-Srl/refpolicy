@@ -131,6 +131,7 @@ files_list_root(domain)
 ifdef(`init_systemd',`
 	optional_policy(`
 		shutdown_sigchld(domain)
+		systemd_stream_connect_nsresourced(domain)
 	')
 ')
 
