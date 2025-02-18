@@ -232,6 +232,10 @@ template(`su_role_template',`
 		auth_use_pam_systemd($1_su_t)
 	')
 
+	ifdef(`init_systemd',`
+		systemd_inherit_logind_fds($1_su_t)
+	')
+
 	tunable_policy(`su_allow_user_exec_domains',`
 		allow $3 $1_su_t:process signal;
 
