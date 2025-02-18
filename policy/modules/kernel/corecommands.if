@@ -842,3 +842,21 @@ interface(`corecmd_mmap_all_executables',`
 	corecmd_search_bin($1)
 	mmap_exec_files_pattern($1, bin_t, exec_type)
 ')
+
+########################################
+## <summary>
+##	Read symbolic links of bin_t files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`fs_read_bin_symlinks',`
+	gen_require(`
+		type bin_t;
+	')
+
+	read_lnk_files_pattern($1, bin_t, bin_t)
+')

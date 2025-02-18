@@ -262,6 +262,7 @@ ifdef(`distro_gentoo',`
 /usr/lib/sftp-server		--	gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/ssh(/.*)?			gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/sudo/sesh		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/usr/lib/systemd/profile\.d(/.*)?	gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/systemd/systemd.*	--	gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/systemd/system-shutdown(/.*)?	gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/systemd/system-sleep(/.*)?	gen_context(system_u:object_r:bin_t,s0)
