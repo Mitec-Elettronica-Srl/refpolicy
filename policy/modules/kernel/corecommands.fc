@@ -148,6 +148,19 @@ ifdef(`distro_gentoo',`
 ')
 
 #
+# /bin
+#
+/bin/sh			--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/d?ash		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/bash		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/bash2		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/mksh       --	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/fish		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/tcsh		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/yash		--	gen_context(system_u:object_r:shell_exec_t,s0)
+/bin/zsh.*		--	gen_context(system_u:object_r:shell_exec_t,s0)
+
+#
 # /usr
 #
 /usr/(.*/)?Bin(/.*)?			gen_context(system_u:object_r:bin_t,s0)
