@@ -620,7 +620,13 @@ allow kern_unconfined unlabeled_t:process { fork getattr getcap getpgid getrlimi
 #============= kernel_t ==============
 allow kernel_t self:capability2 checkpoint_restore;
 allow kernel_t self:user_namespace create;
+gen_require(`
+	class service { start status stop };
+')
 allow kernel_t unlabeled_t:service { start status stop };
 
 #============= unlabeled_t ==============
+gen_require(`
+	type tmpfs_t;
+')
 allow unlabeled_t tmpfs_t:filesystem associate;

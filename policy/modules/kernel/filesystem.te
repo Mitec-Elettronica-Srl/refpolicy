@@ -365,6 +365,9 @@ allow filesystem_unconfined_type filesystem_type:filesystem { associate getattr 
 # pseudo filesystem types that are applied to both the filesystem
 # and its files.
 # Exclude unlabeled_t from entrypoint to comply with neverallow rule.
+gen_require(`
+	type unlabeled_t;
+')
 allow filesystem_unconfined_type { filesystem_type -unlabeled_t }:file { entrypoint exec_file_perms execmod manage_file_perms mounton quotaon relabel_file_perms watch watch_mount watch_reads watch_sb watch_with_perm };
 allow filesystem_unconfined_type filesystem_type:lnk_file  { append execmod execute manage_lnk_file_perms map mounton open quotaon relabel_lnk_file_perms watch watch_mount watch_reads watch_sb watch_with_perm };
 allow filesystem_unconfined_type filesystem_type:sock_file { execmod execute manage_sock_file_perms map mounton quotaon relabel_sock_file_perms watch watch_mount watch_reads watch_sb watch_with_perm };
