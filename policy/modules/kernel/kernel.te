@@ -608,3 +608,11 @@ allow kern_unconfined unlabeled_t:filesystem { associate getattr mount quotaget 
 allow kern_unconfined unlabeled_t:association { polmatch recvfrom sendto setcontext };
 allow kern_unconfined unlabeled_t:packet { forward_in forward_out recv relabelto send };
 allow kern_unconfined unlabeled_t:process { fork getattr getcap getpgid getrlimit getsched getsession noatsecure ptrace rlimitinh setcap setcurrent setexec setfscreate setkeycreate setpgid setrlimit setsched setsockcreate share siginh signal_perms };
+
+#============= kernel_t ==============
+allow kernel_t self:capability2 checkpoint_restore;
+allow kernel_t self:user_namespace create;
+allow kernel_t unlabeled_t:service { start status stop };
+
+#============= unlabeled_t ==============
+allow unlabeled_t tmpfs_t:filesystem associate;
