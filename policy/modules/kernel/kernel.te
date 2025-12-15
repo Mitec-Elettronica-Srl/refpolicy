@@ -626,7 +626,4 @@ gen_require(`
 allow kernel_t unlabeled_t:service { start status stop };
 
 #============= unlabeled_t ==============
-gen_require(`
-	type tmpfs_t;
-')
-allow unlabeled_t tmpfs_t:filesystem associate;
+fs_associate_tmpfs(unlabeled_t)

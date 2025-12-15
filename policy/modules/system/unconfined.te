@@ -84,12 +84,7 @@ tunable_policy(`user_execmod_tmpfs', `
 
 # allow limited interaction between kernel_t and unconfined_t
 kernel_domtrans_to(unconfined_t, unconfined_exec_t)
-gen_require(`
-	type kernel_t;
-	class dbus send_msg;
-')
-allow kernel_t unconfined_t:dbus send_msg;
-allow unconfined_t kernel_t:dbus send_msg;
+kernel_dbus_chat_unconfined(unconfined_t)
 
 # this is wrong and neverallow will make the build fail
 #allow unconfined_t unlabeled_t:file entrypoint;
