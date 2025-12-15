@@ -365,7 +365,7 @@ allow filesystem_unconfined_type filesystem_type:filesystem { associate getattr 
 # pseudo filesystem types that are applied to both the filesystem
 # and its files.
 # Exclude unlabeled_t from entrypoint to comply with neverallow rule.
-kernel_filesystem_unconfined_file_access(filesystem_unconfined_type)
+fs_unconfined_file_access_exclude_unlabeled(filesystem_unconfined_type)
 allow filesystem_unconfined_type filesystem_type:lnk_file  { append execmod execute manage_lnk_file_perms map mounton open quotaon relabel_lnk_file_perms watch watch_mount watch_reads watch_sb watch_with_perm };
 allow filesystem_unconfined_type filesystem_type:sock_file { execmod execute manage_sock_file_perms map mounton quotaon relabel_sock_file_perms watch watch_mount watch_reads watch_sb watch_with_perm };
 allow filesystem_unconfined_type filesystem_type:fifo_file { execmod execute manage_fifo_file_perms map mounton quotaon relabel_fifo_file_perms watch watch_mount watch_reads watch_sb watch_with_perm };
