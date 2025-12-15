@@ -7430,7 +7430,7 @@ interface(`fs_search_bpf',`
 #
 interface(`fs_unconfined_file_access_exclude_unlabeled',`
 	gen_require(`
-		type unlabeled_t;
+		type unlabeled_t;  #selint-disable:W-011
 		attribute filesystem_type;
 	')
 
