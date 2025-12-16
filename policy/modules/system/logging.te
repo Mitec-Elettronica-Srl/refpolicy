@@ -196,6 +196,10 @@ allow auditd_t var_log_t:lnk_file read_lnk_file_perms;
 allow auditd_t var_log_t:dir { search_dir_perms create_dir_perms };
 # Allow creating /var/log/audit directory
 logging_log_filetrans(auditd_t, auditd_log_t, dir, "audit")
+# Allow access to tmpfs when /var/log is a symlink to volatile/log on tmpfs
+fs_search_tmpfs(auditd_t)
+fs_manage_tmpfs_dirs(auditd_t)
+fs_manage_tmpfs_files(auditd_t)
 
 manage_dirs_pattern(auditd_t, auditd_runtime_t, auditd_runtime_t)
 manage_files_pattern(auditd_t, auditd_runtime_t, auditd_runtime_t)
@@ -466,6 +470,10 @@ files_search_spool(syslogd_t)
 # Allow access for syslog-ng
 allow syslogd_t var_log_t:dir { create setattr };
 allow syslogd_t var_log_t:lnk_file read_lnk_file_perms;
+# Allow access to tmpfs when /var/log is a symlink to volatile/log on tmpfs
+fs_search_tmpfs(syslogd_t)
+fs_manage_tmpfs_dirs(syslogd_t)
+fs_manage_tmpfs_files(syslogd_t)
 
 # for systemd but can not be conditional
 files_runtime_filetrans(syslogd_t, syslogd_tmp_t, dir, "log")
