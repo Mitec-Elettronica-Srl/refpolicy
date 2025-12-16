@@ -2305,6 +2305,16 @@ miscfiles_getattr_localization(systemd_tmpfiles_t)
 seutil_read_config(systemd_tmpfiles_t)
 seutil_read_file_contexts(systemd_tmpfiles_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
+allow systemd_tmpfiles_t unlabeled_t:dir { getattr search };
+allow systemd_tmpfiles_t unlabeled_t:file { getattr map open read };
+
+# Allow connecting to journal socket
+logging_stream_connect_journald_varlink(systemd_tmpfiles_t)
+
 sysnet_manage_config(systemd_tmpfiles_t)
 sysnet_relabel_config(systemd_tmpfiles_t)
 
