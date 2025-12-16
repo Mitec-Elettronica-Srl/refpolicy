@@ -153,6 +153,11 @@ auth_use_nsswitch(chkpwd_t)
 
 logging_send_audit_msgs(chkpwd_t)
 logging_send_syslog_msg(chkpwd_t)
+# Allow writing to journal socket (dev-log at /run/systemd/journal/dev-log)
+gen_require(`
+	type syslogd_runtime_t;
+')
+allow chkpwd_t syslogd_runtime_t:sock_file write;
 
 miscfiles_read_localization(chkpwd_t)
 
