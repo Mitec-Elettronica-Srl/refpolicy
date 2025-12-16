@@ -48,6 +48,13 @@ miscfiles_read_localization(modemmanager_t)
 
 logging_send_syslog_msg(modemmanager_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow modemmanager_t unlabeled_t:dir search;
+allow modemmanager_t unlabeled_t:file { getattr map open read };
+
+# Allow access to syslogd runtime socket
+allow modemmanager_t syslogd_runtime_t:sock_file write;
+
 optional_policy(`
 	dbus_system_domain(modemmanager_t, modemmanager_exec_t)
 

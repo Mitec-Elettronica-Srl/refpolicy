@@ -238,6 +238,9 @@ logging_signal_dispatcher(auditd_t)
 
 miscfiles_read_localization(auditd_t)
 
+# Allow access to unlabeled dirs (for overlay filesystems)
+allow auditd_t unlabeled_t:dir search;
+
 mls_file_read_all_levels(auditd_t)
 mls_file_write_all_levels(auditd_t) # Need to be able to write to /var/run/ directory
 mls_fd_use_all_levels(auditd_t)
@@ -385,6 +388,12 @@ logging_send_syslog_msg(klogd_t)
 
 miscfiles_read_localization(klogd_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow klogd_t unlabeled_t:dir search;
+allow klogd_t unlabeled_t:file { getattr map open read };
+# Allow execute access to bin_t files
+allow klogd_t bin_t:file { map read execute };
+
 mls_file_read_all_levels(klogd_t)
 
 userdom_dontaudit_search_user_home_dirs(klogd_t)
@@ -521,6 +530,11 @@ auth_use_nsswitch(syslogd_t)
 init_use_fds(syslogd_t)
 
 miscfiles_read_localization(syslogd_t)
+
+# Allow access to unlabeled files (for overlay filesystems)
+allow syslogd_t unlabeled_t:file { getattr map open read };
+# Allow execute access to bin_t files
+allow syslogd_t bin_t:file { map read execute };
 
 seutil_read_config(syslogd_t)
 

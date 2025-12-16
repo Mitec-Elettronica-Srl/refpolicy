@@ -574,6 +574,10 @@ logging_send_syslog_msg(systemd_coredump_t)
 
 seutil_search_default_contexts(systemd_coredump_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow systemd_coredump_t unlabeled_t:dir { getattr search };
+allow systemd_coredump_t unlabeled_t:file { getattr map open read };
+
 #######################################
 #
 # Systemd generator local policy
@@ -657,6 +661,9 @@ init_getattr_all_unit_files(systemd_generator_t)
 modutils_domtrans(systemd_generator_t)
 
 miscfiles_read_localization(systemd_generator_t)
+
+# Allow access to unlabeled files (for overlay filesystems)
+allow systemd_generator_t unlabeled_t:file { getattr map open read };
 
 selinux_getattr_fs(systemd_generator_t)
 seutil_search_default_contexts(systemd_generator_t)
@@ -904,6 +911,10 @@ init_write_runtime_files(systemd_hostnamed_t)
 
 miscfiles_read_localization(systemd_hostnamed_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow systemd_hostnamed_t unlabeled_t:dir { getattr search };
+allow systemd_hostnamed_t unlabeled_t:file { getattr map open read };
+
 selinux_use_status_page(systemd_hostnamed_t)
 
 seutil_read_config(systemd_hostnamed_t)
@@ -1136,6 +1147,13 @@ fs_getattr_xattr_fs(systemd_logind_t)
 fs_search_auto_mountpoints(systemd_logind_t)
 fs_watch_memory_pressure(systemd_logind_t)
 fs_getattr_nsfs_files(systemd_logind_t)
+
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow systemd_logind_t unlabeled_t:dir { getattr search };
+allow systemd_logind_t unlabeled_t:file { getattr map open read };
+# Allow access to initrc_t files
+allow systemd_logind_t initrc_t:dir search;
+allow systemd_logind_t initrc_t:file { getattr ioctl open read };
 
 selinux_use_status_page(systemd_logind_t)
 
@@ -1930,6 +1948,10 @@ udev_read_runtime_files(systemd_rfkill_t)
 
 systemd_log_parse_environment(systemd_rfkill_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow systemd_rfkill_t unlabeled_t:dir search;
+allow systemd_rfkill_t unlabeled_t:file { getattr map open read };
+
 mls_file_read_to_clearance(systemd_rfkill_t)
 mls_file_write_to_clearance(systemd_rfkill_t)
 
@@ -2050,6 +2072,10 @@ selinux_use_status_page(systemd_sessions_t)
 seutil_read_config(systemd_sessions_t)
 seutil_read_default_contexts(systemd_sessions_t)
 seutil_read_file_contexts(systemd_sessions_t)
+
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow systemd_sessions_t unlabeled_t:dir search;
+allow systemd_sessions_t unlabeled_t:file { getattr map open read };
 
 systemd_log_parse_environment(systemd_sessions_t)
 
@@ -2319,6 +2345,10 @@ selinux_use_status_page(systemd_update_done_t)
 seutil_read_config(systemd_update_done_t)
 seutil_read_file_contexts(systemd_update_done_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow systemd_update_done_t unlabeled_t:dir { add_name remove_name search write };
+allow systemd_update_done_t unlabeled_t:file { getattr map open read };
+
 systemd_log_parse_environment(systemd_update_done_t)
 
 #########################################
@@ -2441,6 +2471,10 @@ kernel_read_kernel_sysctls(systemd_userdbd_t)
 
 seutil_search_default_contexts(systemd_userdbd_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow systemd_userdbd_t unlabeled_t:dir { getattr search };
+allow systemd_userdbd_t unlabeled_t:file { getattr map open read };
+
 systemd_log_parse_environment(systemd_userdbd_t)
 
 systemd_stream_connect_nsresourced(systemd_userdbd_t)
@@ -2485,6 +2519,10 @@ systemd_dbus_chat_logind(systemd_user_runtime_dir_t)
 
 seutil_read_file_contexts(systemd_user_runtime_dir_t)
 seutil_libselinux_linked(systemd_user_runtime_dir_t)
+
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow systemd_user_runtime_dir_t unlabeled_t:dir search;
+allow systemd_user_runtime_dir_t unlabeled_t:file { getattr map open read };
 
 userdom_list_all_user_runtime(systemd_user_runtime_dir_t)
 userdom_delete_all_user_runtime_dirs(systemd_user_runtime_dir_t)

@@ -100,6 +100,10 @@ logging_send_syslog_msg(getty_t)
 
 miscfiles_read_localization(getty_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow getty_t unlabeled_t:dir search;
+allow getty_t unlabeled_t:file { getattr map open read };
+
 ifdef(`distro_gentoo',`
 	# Gentoo default /etc/issue makes agetty
 	# do a DNS lookup for the hostname

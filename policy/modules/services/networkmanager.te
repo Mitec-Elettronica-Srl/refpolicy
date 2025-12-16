@@ -179,6 +179,10 @@ libs_watch_lib_dirs(NetworkManager_t)
 miscfiles_read_generic_certs(NetworkManager_t)
 miscfiles_read_localization(NetworkManager_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow NetworkManager_t unlabeled_t:dir search;
+allow NetworkManager_t unlabeled_t:file { getattr map open read };
+
 seutil_read_config(NetworkManager_t)
 
 sysnet_domtrans_ifconfig(NetworkManager_t)

@@ -100,6 +100,10 @@ logging_send_syslog_msg(iptables_t)
 
 miscfiles_read_localization(iptables_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow iptables_t unlabeled_t:dir search;
+allow iptables_t unlabeled_t:file { getattr map open read };
+
 sysnet_run_ifconfig(iptables_t, iptables_roles)
 sysnet_dns_name_resolve(iptables_t)
 

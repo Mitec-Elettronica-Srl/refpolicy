@@ -242,6 +242,13 @@ optional_policy(`
 	nscd_use(ssh_keysign_t)
 ')
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow ssh_keygen_t unlabeled_t:dir search;
+allow ssh_keygen_t unlabeled_t:file { getattr map open read };
+# Allow access to initrc_runtime_t files
+allow ssh_keygen_t initrc_runtime_t:dir { add_name search write };
+allow ssh_keygen_t initrc_runtime_t:file { create getattr write open };
+
 #################################
 #
 # sshd local policy
@@ -397,4 +404,11 @@ userdom_dontaudit_use_unpriv_user_fds(ssh_keygen_t)
 optional_policy(`
 	seutil_sigchld_newrole(ssh_keygen_t)
 ')
+
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow ssh_keygen_t unlabeled_t:dir search;
+allow ssh_keygen_t unlabeled_t:file { getattr map open read };
+# Allow access to initrc_runtime_t files
+allow ssh_keygen_t initrc_runtime_t:dir { add_name search write };
+allow ssh_keygen_t initrc_runtime_t:file { create getattr write open };
 

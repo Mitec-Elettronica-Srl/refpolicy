@@ -125,6 +125,13 @@ auth_use_nsswitch(bluetooth_t)
 
 logging_send_syslog_msg(bluetooth_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+allow bluetooth_t unlabeled_t:dir search;
+allow bluetooth_t unlabeled_t:file { getattr map open read };
+
+# Allow access to syslogd runtime socket
+allow bluetooth_t syslogd_runtime_t:sock_file write;
+
 miscfiles_read_localization(bluetooth_t)
 miscfiles_read_fonts(bluetooth_t)
 miscfiles_read_hwdata(bluetooth_t)
