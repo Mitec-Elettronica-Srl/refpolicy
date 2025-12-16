@@ -242,13 +242,6 @@ optional_policy(`
 	nscd_use(ssh_keysign_t)
 ')
 
-# Allow access to unlabeled files/dirs (for overlay filesystems)
-allow ssh_keygen_t unlabeled_t:dir search;
-allow ssh_keygen_t unlabeled_t:file { getattr map open read };
-# Allow access to initrc_runtime_t files
-allow ssh_keygen_t initrc_runtime_t:dir { add_name search write };
-allow ssh_keygen_t initrc_runtime_t:file { create getattr write open };
-
 #################################
 #
 # sshd local policy
@@ -357,6 +350,13 @@ optional_policy(`
 	xserver_link_xdm_keys(sshd_t)
 ')
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
+allow sshd_t unlabeled_t:dir search;
+allow sshd_t unlabeled_t:file { getattr map open read };
+
 ########################################
 #
 # ssh_keygen local policy
@@ -406,6 +406,10 @@ optional_policy(`
 ')
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+	type initrc_runtime_t;
+')
 allow ssh_keygen_t unlabeled_t:dir search;
 allow ssh_keygen_t unlabeled_t:file { getattr map open read };
 # Allow access to initrc_runtime_t files

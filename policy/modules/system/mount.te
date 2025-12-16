@@ -250,6 +250,9 @@ optional_policy(`
 ')
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow mount_t unlabeled_t:dir { add_name create read remove_name rename reparent setattr write };
 allow mount_t unlabeled_t:file { create getattr map open read rename unlink write };
 allow mount_t unlabeled_t:chr_file unlink;

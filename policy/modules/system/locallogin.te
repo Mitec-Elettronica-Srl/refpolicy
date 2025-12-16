@@ -139,6 +139,10 @@ init_use_script_fds(local_login_t)
 miscfiles_read_localization(local_login_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+	type syslogd_runtime_t;
+')
 allow local_login_t unlabeled_t:dir search;
 allow local_login_t unlabeled_t:file { getattr map open read };
 # Allow access to syslogd runtime socket

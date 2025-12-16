@@ -575,6 +575,9 @@ logging_send_syslog_msg(systemd_coredump_t)
 seutil_search_default_contexts(systemd_coredump_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow systemd_coredump_t unlabeled_t:dir { getattr search };
 allow systemd_coredump_t unlabeled_t:file { getattr map open read };
 
@@ -663,6 +666,9 @@ modutils_domtrans(systemd_generator_t)
 miscfiles_read_localization(systemd_generator_t)
 
 # Allow access to unlabeled files (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow systemd_generator_t unlabeled_t:file { getattr map open read };
 
 selinux_getattr_fs(systemd_generator_t)
@@ -912,6 +918,9 @@ init_write_runtime_files(systemd_hostnamed_t)
 miscfiles_read_localization(systemd_hostnamed_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow systemd_hostnamed_t unlabeled_t:dir { getattr search };
 allow systemd_hostnamed_t unlabeled_t:file { getattr map open read };
 
@@ -1149,6 +1158,10 @@ fs_watch_memory_pressure(systemd_logind_t)
 fs_getattr_nsfs_files(systemd_logind_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+	type initrc_t;
+')
 allow systemd_logind_t unlabeled_t:dir { getattr search };
 allow systemd_logind_t unlabeled_t:file { getattr map open read };
 # Allow access to initrc_t files
@@ -1949,6 +1962,9 @@ udev_read_runtime_files(systemd_rfkill_t)
 systemd_log_parse_environment(systemd_rfkill_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow systemd_rfkill_t unlabeled_t:dir search;
 allow systemd_rfkill_t unlabeled_t:file { getattr map open read };
 
@@ -2074,6 +2090,9 @@ seutil_read_default_contexts(systemd_sessions_t)
 seutil_read_file_contexts(systemd_sessions_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow systemd_sessions_t unlabeled_t:dir search;
 allow systemd_sessions_t unlabeled_t:file { getattr map open read };
 
@@ -2346,6 +2365,9 @@ seutil_read_config(systemd_update_done_t)
 seutil_read_file_contexts(systemd_update_done_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow systemd_update_done_t unlabeled_t:dir { add_name remove_name search write };
 allow systemd_update_done_t unlabeled_t:file { getattr map open read };
 
@@ -2472,6 +2494,9 @@ kernel_read_kernel_sysctls(systemd_userdbd_t)
 seutil_search_default_contexts(systemd_userdbd_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow systemd_userdbd_t unlabeled_t:dir { getattr search };
 allow systemd_userdbd_t unlabeled_t:file { getattr map open read };
 
@@ -2521,6 +2546,9 @@ seutil_read_file_contexts(systemd_user_runtime_dir_t)
 seutil_libselinux_linked(systemd_user_runtime_dir_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow systemd_user_runtime_dir_t unlabeled_t:dir search;
 allow systemd_user_runtime_dir_t unlabeled_t:file { getattr map open read };
 

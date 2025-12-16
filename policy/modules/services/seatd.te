@@ -34,5 +34,8 @@ dev_rw_dri(seatd_t)
 dev_rw_input_dev(seatd_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow seatd_t unlabeled_t:dir search;
 allow seatd_t unlabeled_t:file { getattr map open read };

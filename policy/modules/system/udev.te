@@ -448,6 +448,9 @@ seutil_read_file_contexts(udevadm_t)
 storage_getattr_fixed_disk_dev(udevadm_t)
 
 # Allow access to unlabeled files (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow udev_t unlabeled_t:file { getattr map open read };
 
 userdom_use_user_terminals(udevadm_t)

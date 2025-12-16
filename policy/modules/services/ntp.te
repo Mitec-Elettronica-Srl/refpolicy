@@ -141,6 +141,10 @@ logging_send_syslog_msg(ntpd_t)
 miscfiles_read_localization(ntpd_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+	type initrc_runtime_t;
+')
 allow ntpd_t unlabeled_t:dir { getattr search };
 # Allow access to initrc_runtime_t files
 allow ntpd_t initrc_runtime_t:file { getattr open read };

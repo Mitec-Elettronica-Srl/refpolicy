@@ -86,13 +86,22 @@ init_signull_script(avahi_t)
 logging_send_syslog_msg(avahi_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow avahi_t unlabeled_t:dir search;
 allow avahi_t unlabeled_t:file { getattr map open read };
 
 # Allow access to initrc_runtime_t files
+gen_require(`
+	type initrc_runtime_t;
+')
 allow avahi_t initrc_runtime_t:file { getattr open read };
 
 # Allow access to syslogd runtime socket
+gen_require(`
+	type syslogd_runtime_t;
+')
 allow avahi_t syslogd_runtime_t:sock_file write;
 
 miscfiles_read_localization(avahi_t)

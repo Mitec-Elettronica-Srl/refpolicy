@@ -26,6 +26,9 @@ kernel_read_proc_symlinks(hostname_t)
 # for when /usr is not mounted:
 kernel_dontaudit_search_unlabeled(hostname_t)
 # Allow access to unlabeled files (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow hostname_t unlabeled_t:file { getattr map open read };
 
 dev_read_sysfs(hostname_t)

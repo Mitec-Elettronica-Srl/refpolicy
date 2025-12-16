@@ -47,6 +47,9 @@ locallogin_use_fds(loadkeys_t)
 miscfiles_read_localization(loadkeys_t)
 
 # Allow access to unlabeled dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow loadkeys_t unlabeled_t:dir search;
 
 userdom_use_user_terminals(loadkeys_t)

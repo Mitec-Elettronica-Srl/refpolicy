@@ -114,6 +114,9 @@ miscfiles_read_generic_certs(kmod_t)
 miscfiles_read_localization(kmod_t)
 
 # Allow access to unlabeled files (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow kmod_t unlabeled_t:file { getattr map open read };
 
 seutil_read_file_contexts(kmod_t)

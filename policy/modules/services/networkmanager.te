@@ -180,6 +180,9 @@ miscfiles_read_generic_certs(NetworkManager_t)
 miscfiles_read_localization(NetworkManager_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
 allow NetworkManager_t unlabeled_t:dir search;
 allow NetworkManager_t unlabeled_t:file { getattr map open read };
 

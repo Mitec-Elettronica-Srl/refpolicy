@@ -190,6 +190,10 @@ miscfiles_read_localization(system_dbusd_t)
 miscfiles_read_generic_certs(system_dbusd_t)
 
 # Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+	type syslogd_runtime_t;
+')
 allow system_dbusd_t unlabeled_t:dir search;
 allow system_dbusd_t unlabeled_t:file { getattr map open read };
 # Allow access to syslogd runtime socket
