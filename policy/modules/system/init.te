@@ -1336,6 +1336,9 @@ optional_policy(`
 	optional_policy(`
 		policykit_dbus_chat(initrc_t)
 	')
+
+	# Allow sending dbus messages to unconfined_t
+	unconfined_dbus_send(initrc_t)
 ')
 
 optional_policy(`
