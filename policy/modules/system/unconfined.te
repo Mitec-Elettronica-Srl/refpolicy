@@ -86,8 +86,13 @@ tunable_policy(`user_execmod_tmpfs', `
 kernel_domtrans_to(unconfined_t, unconfined_exec_t)
 kernel_dbus_chat_unconfined(unconfined_t)
 
-# this is wrong and neverallow will make the build fail
-#allow unconfined_t unlabeled_t:file entrypoint;
+# Allow unconfined_t to execute unlabeled_t files as entrypoint
+# This is allowed due to the exception in the neverallow rule for unconfined_t
+allow unconfined_t unlabeled_t:file entrypoint;
+
+# Allow unconfined_t to check status of unlabeled_t service files
+# Needed when service files are mislabeled as unlabeled_t
+allow unconfined_t unlabeled_t:service status;
 
 #!!!! This avc can be allowed using the boolean 'allow_execmod'
 userdom_execmod_user_tmpfs_files(unconfined_t)
