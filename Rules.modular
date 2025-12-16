@@ -212,10 +212,16 @@ endif
 # Appconfig files
 #
 $(builtappconf)/customizable_types: $(base_conf)
+	@echo "Building customizable_types"
 	@$(INSTALL) -d -m 0755 $(@D)
 	@test -d $(tmpdir) || mkdir -p $(tmpdir)
-	@$(GREP) '^[[:blank:]]*type .*customizable' $< 2>/dev/null | cut -d';' -f1 | cut -d',' -f1 | cut -d' ' -f2 | $(SORT) -u > $(tmpdir)/customizable_types || touch $(tmpdir)/customizable_types
+	@if $(GREP) -q '^[[:blank:]]*type .*customizable' $< 2>/dev/null; then \
+		$(GREP) '^[[:blank:]]*type .*customizable' $< | cut -d';' -f1 | cut -d',' -f1 | cut -d' ' -f2 | $(SORT) -u > $(tmpdir)/customizable_types; \
+	else \
+		echo -n > $(tmpdir)/customizable_types; \
+	fi
 	$(verbose) $(INSTALL) -m 0644 $(tmpdir)/customizable_types $@
+	@test -f $@ || (echo "Error: customizable_types was not created at $@" && exit 1)
 
 ########################################
 #

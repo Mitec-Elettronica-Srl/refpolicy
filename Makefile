@@ -571,6 +571,24 @@ $(contextpath)/users/%: $(builtappconf)/%_default_contexts
 	@$(INSTALL) -d -m 0755 $(@D)
 	$(verbose) $(INSTALL) -m 0644 $^ $@
 
+customizable_types:
+	@echo "Building customizable_types"
+	@test -d $(tmpdir) || mkdir -p $(tmpdir)
+	@$(INSTALL) -d -m 0755 $(builtappconf)
+	@base_conf_file="$(builddir)base.conf"; \
+	if [ -f "$$base_conf_file" ]; then \
+		if $(GREP) -q '^[[:blank:]]*type .*customizable' "$$base_conf_file" 2>/dev/null; then \
+			$(GREP) '^[[:blank:]]*type .*customizable' "$$base_conf_file" | cut -d';' -f1 | cut -d',' -f1 | cut -d' ' -f2 | $(SORT) -u > $(tmpdir)/customizable_types; \
+		else \
+			echo -n > $(tmpdir)/customizable_types; \
+		fi; \
+	else \
+		echo "Warning: base.conf not found at $$base_conf_file. Creating empty customizable_types" >&2; \
+		echo -n > $(tmpdir)/customizable_types; \
+	fi
+	$(verbose) $(INSTALL) -m 0644 $(tmpdir)/customizable_types $(builtappconf)/customizable_types
+	@echo "Built customizable_types at $(builtappconf)/customizable_types"
+
 $(appdir)/customizable_types: $(builtappconf)/customizable_types
 	@$(INSTALL) -d -m 0755 $(@D)
 	$(verbose) $(INSTALL) -m 0644 $< $@
@@ -733,4 +751,4 @@ ifneq ($(generated_fc),)
 endif
 endif
 
-.PHONY: install-src install-appconfig install-headers install-udica-templates build-interface-db generate xml conf html bare tags
+.PHONY: install-src install-appconfig install-headers install-udica-templates build-interface-db generate xml conf html bare tags customizable_types
