@@ -216,7 +216,10 @@ kernel_rootfs_mountpoint(unlabeled_t)
 fs_associate(unlabeled_t)
 sid file gen_context(system_u:object_r:unlabeled_t,s0)
 sid unlabeled gen_context(system_u:object_r:unlabeled_t,mls_systemhigh)
-neverallow ~{ unconfined_t } unlabeled_t:file entrypoint;
+gen_require(`
+	attribute unconfined_domain_type;
+')
+neverallow ~unconfined_domain_type unlabeled_t:file entrypoint;
 
 # These initial sids are no longer used, and can be removed:
 sid any_socket		gen_context(system_u:object_r:unlabeled_t,mls_systemhigh)
