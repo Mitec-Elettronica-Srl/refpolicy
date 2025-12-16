@@ -571,6 +571,10 @@ $(contextpath)/users/%: $(builtappconf)/%_default_contexts
 	@$(INSTALL) -d -m 0755 $(@D)
 	$(verbose) $(INSTALL) -m 0644 $^ $@
 
+$(appdir)/customizable_types: $(builtappconf)/customizable_types
+	@$(INSTALL) -d -m 0755 $(@D)
+	$(verbose) $(INSTALL) -m 0644 $< $@
+
 $(appdir)/%: $(builtappconf)/%
 	$(verbose) $(M4) $(M4PARAM) $(m4support) $< > $(tmpdir)/$(@F)
 	@$(INSTALL) -d -m 0755 $(@D)

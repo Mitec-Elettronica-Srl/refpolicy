@@ -214,7 +214,7 @@ endif
 $(builtappconf)/customizable_types: $(base_conf)
 	@$(INSTALL) -d -m 0755 $(@D)
 	@test -d $(tmpdir) || mkdir -p $(tmpdir)
-	$(verbose) ($(GREP) '^[[:blank:]]*type .*customizable' $< 2>/dev/null | cut -d';' -f1 | cut -d',' -f1 | cut -d' ' -f2 | $(SORT) -u > $(tmpdir)/customizable_types) || touch $(tmpdir)/customizable_types
+	@$(GREP) '^[[:blank:]]*type .*customizable' $< 2>/dev/null | cut -d';' -f1 | cut -d',' -f1 | cut -d' ' -f2 | $(SORT) -u > $(tmpdir)/customizable_types || touch $(tmpdir)/customizable_types
 	$(verbose) $(INSTALL) -m 0644 $(tmpdir)/customizable_types $@
 
 ########################################
