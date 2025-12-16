@@ -109,6 +109,8 @@ init_use_script_ptys(kmod_t)
 
 logging_send_syslog_msg(kmod_t)
 logging_search_logs(kmod_t)
+# Allow connecting to journal socket for stdout
+logging_stream_connect_journald_varlink(kmod_t)
 
 miscfiles_read_generic_certs(kmod_t)
 miscfiles_read_localization(kmod_t)

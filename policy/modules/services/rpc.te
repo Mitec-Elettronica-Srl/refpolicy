@@ -339,6 +339,8 @@ dev_rw_lvm_control(nfsd_t)
 files_getattr_tmp_dirs(nfsd_t)
 files_manage_mounttab(nfsd_t)
 files_search_all_mountpoints(nfsd_t)
+# Allow mounting nfsd config filesystem
+files_mounton_all_mountpoints(nfsd_t)
 
 fs_mount_nfsd_fs(nfsd_t)
 fs_getattr_all_fs(nfsd_t)
