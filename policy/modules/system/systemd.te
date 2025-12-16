@@ -1170,6 +1170,9 @@ allow systemd_logind_t unlabeled_t:file { getattr map open read };
 allow systemd_logind_t initrc_t:dir search;
 allow systemd_logind_t initrc_t:file { getattr ioctl open read };
 
+# Allow connecting to journal socket
+logging_stream_connect_journald_varlink(systemd_logind_t)
+
 selinux_use_status_page(systemd_logind_t)
 
 storage_getattr_removable_dev(systemd_logind_t)
@@ -1958,6 +1961,9 @@ dev_rw_wireless(systemd_rfkill_t)
 # Allow reading /etc/udev/udev.conf
 files_read_etc_files(systemd_rfkill_t)
 
+# Allow connecting to journal socket
+logging_stream_connect_journald_varlink(systemd_rfkill_t)
+
 # Allow reading /run/udev/data/+rfkill:rfkill0
 udev_read_runtime_files(systemd_rfkill_t)
 
@@ -2097,6 +2103,9 @@ gen_require(`
 ')
 allow systemd_sessions_t unlabeled_t:dir search;
 allow systemd_sessions_t unlabeled_t:file { getattr map open read };
+
+# Allow connecting to journal socket
+logging_stream_connect_journald_varlink(systemd_sessions_t)
 
 systemd_log_parse_environment(systemd_sessions_t)
 
