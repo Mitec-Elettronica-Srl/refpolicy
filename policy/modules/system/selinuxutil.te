@@ -648,6 +648,12 @@ kernel_relabelfrom_unlabeled_pipes(setfiles_t)
 kernel_relabelfrom_unlabeled_sockets(setfiles_t)
 kernel_relabelfrom_unlabeled_blk_devs(setfiles_t)
 kernel_relabelfrom_unlabeled_chr_devs(setfiles_t)
+# Allow reading unlabeled files (e.g., ld.so.cache) before relabeling
+gen_require(`
+	type unlabeled_t;
+')
+allow setfiles_t unlabeled_t:file { getattr map open read };
+allow setfiles_t unlabeled_t:dir { getattr search };
 kernel_use_fds(setfiles_t)
 kernel_rw_pipes(setfiles_t)
 kernel_rw_unix_dgram_sockets(setfiles_t)
