@@ -869,3 +869,46 @@ interface(`dbus_unconfined',`
 
 	typeattribute $1 dbusd_unconfined;
 ')
+
+#######################################
+## <summary>
+##	Allow all user domains to access D-Bus sockets
+## </summary>
+## <desc>
+##	<p>
+##	This interface allows all user domains to connect to both
+##	system and session D-Bus sockets and adds them to the
+##	D-Bus client attributes.
+##	</p>
+## </desc>
+## <param name="userdomain_attr">
+##	<summary>
+##	The userdomain attribute to grant D-Bus access to.
+##	</summary>
+## </param>
+#
+interface(`dbus_all_userdomains_access',`
+	gen_require(`
+		attribute dbusd_system_bus_client;
+		attribute dbusd_session_bus_client;
+		type system_dbusd_runtime_t, session_dbusd_runtime_t;
+		type system_dbusd_t;
+		attribute session_bus_type;
+		class dbus { acquire_svc send_msg };
+	')
+
+	# Add all user domains to D-Bus client attributes
+	typeattribute $1 dbusd_system_bus_client;
+	typeattribute $1 dbusd_session_bus_client;
+
+	# Allow all user domains to connect to system bus socket
+	allow $1 system_dbusd_runtime_t:sock_file { connectto read write };
+	# Allow all user domains to connect to session bus socket  
+	allow $1 session_dbusd_runtime_t:sock_file { connectto read write };
+	# Allow all user domains to send messages on system bus
+	allow $1 system_dbusd_t:dbus { acquire_svc send_msg };
+	allow system_dbusd_t $1:dbus send_msg;
+	# Allow all user domains to acquire services on all session buses
+	allow $1 session_bus_type:dbus { acquire_svc send_msg };
+	allow session_bus_type $1:dbus send_msg;
+')

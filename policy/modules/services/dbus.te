@@ -327,36 +327,6 @@ optional_policy(`
 	xserver_use_xdm_fds(system_dbusd_t)
 ')
 
-########################################
-#
-# Allow all user domains to access D-Bus sockets
-#
-gen_require(`
-	attribute userdomain;
-	attribute dbusd_system_bus_client;
-	attribute dbusd_session_bus_client;
-	type system_dbusd_runtime_t, session_dbusd_runtime_t;
-	type system_dbusd_t;
-	class dbus { acquire_svc send_msg };
-')
-
-# Add all user domains to D-Bus client attributes
-typeattribute userdomain dbusd_system_bus_client;
-typeattribute userdomain dbusd_session_bus_client;
-
-# Allow all user domains to connect to system bus socket
-allow userdomain system_dbusd_runtime_t:sock_file { connectto read write };
-# Allow all user domains to connect to session bus socket  
-allow userdomain session_dbusd_runtime_t:sock_file { connectto read write };
-# Allow all user domains to send messages on system bus
-allow userdomain system_dbusd_t:dbus { acquire_svc send_msg };
-allow system_dbusd_t userdomain:dbus send_msg;
-# Allow all user domains to acquire services on all session buses
-gen_require(`
-	attribute session_bus_type;
-')
-allow userdomain session_bus_type:dbus { acquire_svc send_msg };
-allow session_bus_type userdomain:dbus send_msg;
 
 ########################################
 #

@@ -77,6 +77,11 @@ attribute admindomain;
 # all user domains
 attribute userdomain;
 
+# Grant all user domains access to D-Bus sockets
+optional_policy(`
+	dbus_all_userdomains_access(userdomain)
+')
+
 # unprivileged user domains
 attribute unpriv_userdomain;
 
