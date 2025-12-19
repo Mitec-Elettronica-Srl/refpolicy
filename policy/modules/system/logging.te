@@ -633,7 +633,7 @@ ifdef(`init_systemd',`
 	# First, ensure we can search /run to create /run/log
 	files_search_runtime(syslogd_t)
 	allow syslogd_t init_runtime_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
-	# Allow searching /var to follow symlinks (e.g., /var/log -> /volatile/log)
+	# Allow searching /var to follow symlinks (e.g., /var/log symlink to /volatile/log)
 	files_search_var(syslogd_t)
 	allow syslogd_t var_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
 	# Allow creating /run/log as var_log_t
