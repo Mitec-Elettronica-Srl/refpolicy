@@ -637,6 +637,9 @@ ifdef(`init_systemd',`
 	fs_manage_tmpfs_files(syslogd_t)
 	# Also allow creating journal directory directly on tmpfs (when /var/log symlink points to tmpfs)
 	fs_tmpfs_filetrans(syslogd_t, systemd_journal_t, dir, "journal")
+	# Ensure syslogd_t can access journal directories that may already exist
+	allow syslogd_t systemd_journal_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+	allow syslogd_t systemd_journal_t:file { append create_file_perms getattr ioctl lock map open read setattr unlink watch write };
 
 	systemd_manage_journal_files(syslogd_t)
 	systemd_watch_journal_dirs(syslogd_t)
