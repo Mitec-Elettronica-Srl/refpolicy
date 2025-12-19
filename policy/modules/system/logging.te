@@ -482,7 +482,10 @@ allow syslogd_t var_log_t:dir { create setattr };
 allow syslogd_t var_log_t:lnk_file read_lnk_file_perms;
 
 # for systemd but can not be conditional
+# Create /run/log as var_log_t (for systemd-journald)
 files_runtime_filetrans(syslogd_t, syslogd_tmp_t, dir, "log")
+# Also allow creating /run/log as var_log_t when it's on tmpfs
+fs_tmpfs_filetrans(syslogd_t, var_log_t, dir, "log")
 
 # manage temporary files
 manage_dirs_pattern(syslogd_t, syslogd_tmp_t, syslogd_tmp_t)

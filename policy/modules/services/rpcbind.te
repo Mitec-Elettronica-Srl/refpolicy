@@ -25,7 +25,7 @@ files_type(rpcbind_var_lib_t)
 # Local policy
 #
 
-allow rpcbind_t self:capability { dac_override setgid setuid sys_tty_config };
+allow rpcbind_t self:capability { chown dac_override setgid setuid sys_tty_config };
 # net_admin is for SO_SNDBUFFORCE
 dontaudit rpcbind_t self:capability net_admin;
 allow rpcbind_t self:fifo_file rw_fifo_file_perms;

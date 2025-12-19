@@ -665,10 +665,11 @@ modutils_domtrans(systemd_generator_t)
 
 miscfiles_read_localization(systemd_generator_t)
 
-# Allow access to unlabeled files (for overlay filesystems)
+# Allow access to unlabeled files/dirs (for overlay filesystems)
 gen_require(`
 	type unlabeled_t;
 ')
+allow systemd_generator_t unlabeled_t:dir { getattr search };
 allow systemd_generator_t unlabeled_t:file { getattr map open read };
 
 selinux_getattr_fs(systemd_generator_t)
