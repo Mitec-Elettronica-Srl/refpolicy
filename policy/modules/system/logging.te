@@ -246,6 +246,11 @@ init_telinit(auditd_t)
 
 logging_set_audit_parameters(auditd_t)
 logging_send_syslog_msg(auditd_t)
+# Allow writing to journal socket (dev-log)
+gen_require(`
+	type syslogd_runtime_t;
+')
+allow auditd_t syslogd_runtime_t:sock_file write;
 logging_domtrans_dispatcher(auditd_t)
 logging_signal_dispatcher(auditd_t)
 

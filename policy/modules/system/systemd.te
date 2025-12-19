@@ -1500,6 +1500,13 @@ kernel_read_kernel_sysctls(systemd_networkd_t)
 kernel_read_network_state(systemd_networkd_t)
 kernel_request_load_module(systemd_networkd_t)
 kernel_rw_net_sysctls(systemd_networkd_t)
+
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
+allow systemd_networkd_t unlabeled_t:dir { getattr search };
+allow systemd_networkd_t unlabeled_t:file { getattr map open read };
 kernel_dontaudit_getattr_proc(systemd_networkd_t)
 
 corecmd_bin_entry_type(systemd_networkd_t)
