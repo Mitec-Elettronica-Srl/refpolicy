@@ -427,6 +427,13 @@ manage_files_pattern(systemd_backlight_t, systemd_backlight_var_lib_t, systemd_b
 fs_search_tmpfs(systemd_backlight_t)
 fs_manage_tmpfs_dirs(systemd_backlight_t)
 fs_manage_tmpfs_files(systemd_backlight_t)
+# Allow creating var_lib_t and init_var_lib_t parent directories on tmpfs, then service-specific subdirectory
+gen_require(`
+	type var_lib_t;
+	type init_var_lib_t;
+')
+fs_tmpfs_filetrans(systemd_backlight_t, var_lib_t, dir)
+fs_tmpfs_filetrans(systemd_backlight_t, init_var_lib_t, dir, "systemd")
 fs_tmpfs_filetrans(systemd_backlight_t, systemd_backlight_var_lib_t, dir)
 
 kernel_getattr_proc(systemd_backlight_t)
@@ -1103,6 +1110,13 @@ init_var_lib_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir)
 fs_search_tmpfs(systemd_logind_t)
 fs_manage_tmpfs_dirs(systemd_logind_t)
 fs_manage_tmpfs_files(systemd_logind_t)
+# Allow creating var_lib_t and init_var_lib_t parent directories on tmpfs, then service-specific subdirectory
+gen_require(`
+	type var_lib_t;
+	type init_var_lib_t;
+')
+fs_tmpfs_filetrans(systemd_logind_t, var_lib_t, dir)
+fs_tmpfs_filetrans(systemd_logind_t, init_var_lib_t, dir, "systemd")
 fs_tmpfs_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir)
 
 manage_fifo_files_pattern(systemd_logind_t, systemd_logind_runtime_t, systemd_logind_runtime_t)
@@ -1979,6 +1993,13 @@ init_var_lib_filetrans(systemd_rfkill_t, systemd_rfkill_var_lib_t, dir)
 fs_search_tmpfs(systemd_rfkill_t)
 fs_manage_tmpfs_dirs(systemd_rfkill_t)
 fs_manage_tmpfs_files(systemd_rfkill_t)
+# Allow creating var_lib_t and init_var_lib_t parent directories on tmpfs, then service-specific subdirectory
+gen_require(`
+	type var_lib_t;
+	type init_var_lib_t;
+')
+fs_tmpfs_filetrans(systemd_rfkill_t, var_lib_t, dir)
+fs_tmpfs_filetrans(systemd_rfkill_t, init_var_lib_t, dir, "systemd")
 fs_tmpfs_filetrans(systemd_rfkill_t, systemd_rfkill_var_lib_t, dir)
 
 fs_getattr_all_fs(systemd_rfkill_t)
