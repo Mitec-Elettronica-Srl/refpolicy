@@ -73,6 +73,13 @@ logging_send_syslog_msg(rpcbind_t)
 
 miscfiles_read_localization(rpcbind_t)
 
+# Allow access to unlabeled files/dirs (for overlay filesystems)
+gen_require(`
+	type unlabeled_t;
+')
+allow rpcbind_t unlabeled_t:dir search;
+allow rpcbind_t unlabeled_t:file { getattr map open read };
+
 # nfsd_t would not be allowed to send unix_stream_socket to rpcbind_t,
 # because they are running in different level. So add rules to allow this.
 mls_socket_read_all_levels(rpcbind_t)

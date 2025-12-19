@@ -23,3 +23,5 @@
 
 /.vagrant/
 /.vscode/
+
+/boot.log

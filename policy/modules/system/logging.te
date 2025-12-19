@@ -401,6 +401,11 @@ files_read_etc_runtime_files(klogd_t)
 files_read_etc_files(klogd_t)
 
 logging_send_syslog_msg(klogd_t)
+# Allow writing to journal socket (dev-log)
+gen_require(`
+	type syslogd_runtime_t;
+')
+allow klogd_t syslogd_runtime_t:sock_file write;
 
 miscfiles_read_localization(klogd_t)
 
@@ -470,10 +475,6 @@ files_search_spool(syslogd_t)
 # Allow access for syslog-ng
 allow syslogd_t var_log_t:dir { create setattr };
 allow syslogd_t var_log_t:lnk_file read_lnk_file_perms;
-# Allow access to tmpfs when /var/log is a symlink to volatile/log on tmpfs
-fs_search_tmpfs(syslogd_t)
-fs_manage_tmpfs_dirs(syslogd_t)
-fs_manage_tmpfs_files(syslogd_t)
 
 # for systemd but can not be conditional
 files_runtime_filetrans(syslogd_t, syslogd_tmp_t, dir, "log")
@@ -622,6 +623,12 @@ ifdef(`init_systemd',`
 	allow syslogd_t var_log_t:dir { create_dir_perms setattr };
 	# Create /run/log/journal directory with proper labeling
 	filetrans_pattern(syslogd_t, var_log_t, systemd_journal_t, dir, "journal")
+	# Allow access to tmpfs when /var/log is a symlink to volatile/log on tmpfs
+	fs_search_tmpfs(syslogd_t)
+	fs_manage_tmpfs_dirs(syslogd_t)
+	fs_manage_tmpfs_files(syslogd_t)
+	# Also allow creating journal directory directly on tmpfs (when /var/log symlink points to tmpfs)
+	fs_tmpfs_filetrans(syslogd_t, systemd_journal_t, dir, "journal")
 
 	systemd_manage_journal_files(syslogd_t)
 	systemd_watch_journal_dirs(syslogd_t)
