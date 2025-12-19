@@ -482,10 +482,9 @@ allow syslogd_t var_log_t:dir { create setattr };
 allow syslogd_t var_log_t:lnk_file read_lnk_file_perms;
 
 # for systemd but can not be conditional
-# Create /run/log as var_log_t (for systemd-journald)
+# Create /run/log as syslogd_tmp_t (temporary location)
 files_runtime_filetrans(syslogd_t, syslogd_tmp_t, dir, "log")
-# Also allow creating /run/log as var_log_t when it's on tmpfs
-fs_tmpfs_filetrans(syslogd_t, var_log_t, dir, "log")
+# Note: Creating /run/log as var_log_t on tmpfs is handled below in the systemd section
 
 # manage temporary files
 manage_dirs_pattern(syslogd_t, syslogd_tmp_t, syslogd_tmp_t)
@@ -627,7 +626,12 @@ ifdef(`init_systemd',`
 	gen_require(`
 		type var_log_t;
 		type systemd_journal_t;
+		type init_runtime_t;
 	')
+	# First, ensure we can search /run to create /run/log
+	files_search_runtime(syslogd_t)
+	allow syslogd_t init_runtime_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+	# Allow creating /run/log as var_log_t
 	allow syslogd_t var_log_t:dir { create_dir_perms setattr };
 	# Create /run/log/journal directory with proper labeling
 	filetrans_pattern(syslogd_t, var_log_t, systemd_journal_t, dir, "journal")
@@ -636,6 +640,8 @@ ifdef(`init_systemd',`
 	fs_manage_tmpfs_dirs(syslogd_t)
 	fs_manage_tmpfs_files(syslogd_t)
 	# Also allow creating journal directory directly on tmpfs (when /var/log symlink points to tmpfs)
+	# First create /run/log as var_log_t on tmpfs, then journal subdirectory
+	fs_tmpfs_filetrans(syslogd_t, var_log_t, dir, "log")
 	fs_tmpfs_filetrans(syslogd_t, systemd_journal_t, dir, "journal")
 	# Ensure syslogd_t can access journal directories that may already exist
 	allow syslogd_t systemd_journal_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };

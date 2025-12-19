@@ -428,7 +428,16 @@ fs_search_tmpfs(systemd_backlight_t)
 fs_manage_tmpfs_dirs(systemd_backlight_t)
 fs_manage_tmpfs_files(systemd_backlight_t)
 # Allow creating service-specific directory on tmpfs (when /var/lib is on tmpfs)
-# The parent directories will be created by init or systemd-tmpfiles
+# The parent directories (/var/lib/systemd) should be created by init or systemd-tmpfiles first
+# Allow creating and managing parent directories if they don't exist yet
+gen_require(`
+	type var_lib_t;
+	type init_var_lib_t;
+')
+# Allow managing parent directories on tmpfs if needed
+allow systemd_backlight_t var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+allow systemd_backlight_t init_var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Then create the service-specific directory
 fs_tmpfs_filetrans(systemd_backlight_t, systemd_backlight_var_lib_t, dir, "backlight")
 
 kernel_getattr_proc(systemd_backlight_t)
@@ -1106,7 +1115,16 @@ fs_search_tmpfs(systemd_logind_t)
 fs_manage_tmpfs_dirs(systemd_logind_t)
 fs_manage_tmpfs_files(systemd_logind_t)
 # Allow creating service-specific directory on tmpfs (when /var/lib is on tmpfs)
-# The parent directories will be created by init or systemd-tmpfiles
+# The parent directories (/var/lib/systemd) should be created by init or systemd-tmpfiles first
+# Allow creating and managing parent directories if they don't exist yet
+gen_require(`
+	type var_lib_t;
+	type init_var_lib_t;
+')
+# Allow managing parent directories on tmpfs if needed
+allow systemd_logind_t var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+allow systemd_logind_t init_var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Then create the service-specific directory
 fs_tmpfs_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir, "linger")
 
 manage_fifo_files_pattern(systemd_logind_t, systemd_logind_runtime_t, systemd_logind_runtime_t)
@@ -1984,7 +2002,16 @@ fs_search_tmpfs(systemd_rfkill_t)
 fs_manage_tmpfs_dirs(systemd_rfkill_t)
 fs_manage_tmpfs_files(systemd_rfkill_t)
 # Allow creating service-specific directory on tmpfs (when /var/lib is on tmpfs)
-# The parent directories will be created by init or systemd-tmpfiles
+# The parent directories (/var/lib/systemd) should be created by init or systemd-tmpfiles first
+# Allow creating and managing parent directories if they don't exist yet
+gen_require(`
+	type var_lib_t;
+	type init_var_lib_t;
+')
+# Allow managing parent directories on tmpfs if needed
+allow systemd_rfkill_t var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+allow systemd_rfkill_t init_var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Then create the service-specific directory
 fs_tmpfs_filetrans(systemd_rfkill_t, systemd_rfkill_var_lib_t, dir, "rfkill")
 
 fs_getattr_all_fs(systemd_rfkill_t)
