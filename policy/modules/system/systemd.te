@@ -423,6 +423,11 @@ allow systemd_backlight_t self:unix_dgram_socket { connect connected_socket_perm
 allow systemd_backlight_t systemd_backlight_var_lib_t:dir manage_dir_perms;
 init_var_lib_filetrans(systemd_backlight_t, systemd_backlight_var_lib_t, dir)
 manage_files_pattern(systemd_backlight_t, systemd_backlight_var_lib_t, systemd_backlight_var_lib_t)
+# Allow access to tmpfs when /var/lib is on tmpfs
+fs_search_tmpfs(systemd_backlight_t)
+fs_manage_tmpfs_dirs(systemd_backlight_t)
+fs_manage_tmpfs_files(systemd_backlight_t)
+fs_tmpfs_filetrans(systemd_backlight_t, systemd_backlight_var_lib_t, dir)
 
 kernel_getattr_proc(systemd_backlight_t)
 
@@ -1094,6 +1099,11 @@ allow systemd_logind_t self:fifo_file rw_fifo_file_perms;
 allow systemd_logind_t systemd_logind_var_lib_t:dir manage_dir_perms;
 allow systemd_logind_t systemd_logind_var_lib_t:file manage_file_perms;
 init_var_lib_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir)
+# Allow access to tmpfs when /var/lib is on tmpfs
+fs_search_tmpfs(systemd_logind_t)
+fs_manage_tmpfs_dirs(systemd_logind_t)
+fs_manage_tmpfs_files(systemd_logind_t)
+fs_tmpfs_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir)
 
 manage_fifo_files_pattern(systemd_logind_t, systemd_logind_runtime_t, systemd_logind_runtime_t)
 manage_files_pattern(systemd_logind_t, systemd_logind_runtime_t, systemd_logind_runtime_t)
@@ -1965,6 +1975,11 @@ allow systemd_rfkill_t self:netlink_kobject_uevent_socket create_socket_perms;
 manage_dirs_pattern(systemd_rfkill_t, systemd_rfkill_var_lib_t, systemd_rfkill_var_lib_t)
 manage_files_pattern(systemd_rfkill_t, systemd_rfkill_var_lib_t, systemd_rfkill_var_lib_t)
 init_var_lib_filetrans(systemd_rfkill_t, systemd_rfkill_var_lib_t, dir)
+# Allow access to tmpfs when /var/lib is on tmpfs
+fs_search_tmpfs(systemd_rfkill_t)
+fs_manage_tmpfs_dirs(systemd_rfkill_t)
+fs_manage_tmpfs_files(systemd_rfkill_t)
+fs_tmpfs_filetrans(systemd_rfkill_t, systemd_rfkill_var_lib_t, dir)
 
 fs_getattr_all_fs(systemd_rfkill_t)
 fs_getattr_nsfs_files(systemd_rfkill_t)
