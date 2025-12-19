@@ -434,9 +434,20 @@ gen_require(`
 	type var_lib_t;
 	type init_var_lib_t;
 ')
-# Allow managing parent directories on tmpfs if needed
-allow systemd_backlight_t var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
-allow systemd_backlight_t init_var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Allow creating parent directories on tmpfs if needed
+# When /var/lib is on tmpfs, we need to create /var/lib/systemd/backlight
+# The parent directories should be created by init or systemd-tmpfiles, but if they don't exist,
+# we need to allow creating them. Use filetrans_pattern for intermediate directories.
+gen_require(`
+	type tmpfs_t;
+	type var_lib_t;
+	type init_var_lib_t;
+')
+# Allow creating directories on tmpfs
+allow systemd_backlight_t tmpfs_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Allow creating /var/lib and /var/lib/systemd on tmpfs if they don't exist
+filetrans_pattern(systemd_backlight_t, tmpfs_t, var_lib_t, dir, "lib")
+filetrans_pattern(systemd_backlight_t, var_lib_t, init_var_lib_t, dir, "systemd")
 # Then create the service-specific directory
 fs_tmpfs_filetrans(systemd_backlight_t, systemd_backlight_var_lib_t, dir, "backlight")
 
@@ -1121,9 +1132,20 @@ gen_require(`
 	type var_lib_t;
 	type init_var_lib_t;
 ')
-# Allow managing parent directories on tmpfs if needed
-allow systemd_logind_t var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
-allow systemd_logind_t init_var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Allow creating parent directories on tmpfs if needed
+# When /var/lib is on tmpfs, we need to create /var/lib/systemd/linger
+# The parent directories should be created by init or systemd-tmpfiles, but if they don't exist,
+# we need to allow creating them. Use filetrans_pattern for intermediate directories.
+gen_require(`
+	type tmpfs_t;
+	type var_lib_t;
+	type init_var_lib_t;
+')
+# Allow creating directories on tmpfs
+allow systemd_logind_t tmpfs_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Allow creating /var/lib and /var/lib/systemd on tmpfs if they don't exist
+filetrans_pattern(systemd_logind_t, tmpfs_t, var_lib_t, dir, "lib")
+filetrans_pattern(systemd_logind_t, var_lib_t, init_var_lib_t, dir, "systemd")
 # Then create the service-specific directory
 fs_tmpfs_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir, "linger")
 
@@ -2008,9 +2030,20 @@ gen_require(`
 	type var_lib_t;
 	type init_var_lib_t;
 ')
-# Allow managing parent directories on tmpfs if needed
-allow systemd_rfkill_t var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
-allow systemd_rfkill_t init_var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Allow creating parent directories on tmpfs if needed
+# When /var/lib is on tmpfs, we need to create /var/lib/systemd/rfkill
+# The parent directories should be created by init or systemd-tmpfiles, but if they don't exist,
+# we need to allow creating them. Use filetrans_pattern for intermediate directories.
+gen_require(`
+	type tmpfs_t;
+	type var_lib_t;
+	type init_var_lib_t;
+')
+# Allow creating directories on tmpfs
+allow systemd_rfkill_t tmpfs_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Allow creating /var/lib and /var/lib/systemd on tmpfs if they don't exist
+filetrans_pattern(systemd_rfkill_t, tmpfs_t, var_lib_t, dir, "lib")
+filetrans_pattern(systemd_rfkill_t, var_lib_t, init_var_lib_t, dir, "systemd")
 # Then create the service-specific directory
 fs_tmpfs_filetrans(systemd_rfkill_t, systemd_rfkill_var_lib_t, dir, "rfkill")
 
