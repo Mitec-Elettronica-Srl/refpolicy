@@ -896,10 +896,15 @@ interface(`dbus_all_userdomains_access',`
 	')
 
 	# Allow all user domains to connect to system bus socket
-	# Note: Attributes from other modules are resolved during policy linking
-	allow $1 system_dbusd_runtime_t:sock_file { connectto read write };
-	# Allow all user domains to connect to session bus socket  
-	allow $1 session_dbusd_runtime_t:sock_file { connectto read write };
+	# Use stream_connect_pattern which handles directory search, sock_file write, and unix_stream_socket connectto
+	stream_connect_pattern($1, system_dbusd_runtime_t, system_dbusd_runtime_t, system_dbusd_t)
+	# Allow reading system bus socket files
+	allow $1 system_dbusd_runtime_t:sock_file read;
+	
+	# For session bus, allow reading and writing socket files
+	# Session bus sockets are in user runtime directories
+	allow $1 session_dbusd_runtime_t:sock_file { getattr open read write append };
+	
 	# Allow all user domains to send messages on system bus
 	allow $1 system_dbusd_t:dbus { acquire_svc send_msg };
 	allow system_dbusd_t $1:dbus send_msg;
