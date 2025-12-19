@@ -623,13 +623,12 @@ ifdef(`init_systemd',`
 	logging_send_syslog_msg(syslogd_t)
 
 	# Allow creating /run/log directory and journal subdirectory
-	# Also handle /var/log/journal when /var/log is a symlink to /volatile/log on tmpfs
+	# Also handle /var/log/journal when /var/log is a symlink to volatile/log on tmpfs
 	gen_require(`
 		type var_log_t;
 		type systemd_journal_t;
 		type init_runtime_t;
 		type var_t;
-		type tmp_t;
 	')
 	# First, ensure we can search /run to create /run/log
 	files_search_runtime(syslogd_t)
@@ -650,9 +649,6 @@ ifdef(`init_systemd',`
 	# First create the parent directory /volatile/log as var_log_t, then journal subdirectory
 	fs_tmpfs_filetrans(syslogd_t, var_log_t, dir, "log")
 	fs_tmpfs_filetrans(syslogd_t, systemd_journal_t, dir, "journal")
-	# Also allow creating /var/log/journal directly (when /var/log is accessible)
-	# This handles the case where journald tries to access /var/log/journal directly
-	filetrans_pattern(syslogd_t, var_log_t, systemd_journal_t, dir, "journal")
 	# Ensure syslogd_t can access journal directories that may already exist (both /run/log/journal and /var/log/journal)
 	allow syslogd_t systemd_journal_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
 	allow syslogd_t systemd_journal_t:file { append create_file_perms getattr ioctl lock map open read setattr unlink watch write };
