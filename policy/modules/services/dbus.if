@@ -889,19 +889,14 @@ interface(`dbus_unconfined',`
 #
 interface(`dbus_all_userdomains_access',`
 	gen_require(`
-		attribute dbusd_system_bus_client;
-		attribute dbusd_session_bus_client;
 		type system_dbusd_runtime_t, session_dbusd_runtime_t;
 		type system_dbusd_t;
 		attribute session_bus_type;
 		class dbus { acquire_svc send_msg };
 	')
 
-	# Add all user domains to D-Bus client attributes
-	typeattribute $1 dbusd_system_bus_client;
-	typeattribute $1 dbusd_session_bus_client;
-
 	# Allow all user domains to connect to system bus socket
+	# Note: Attributes from other modules are resolved during policy linking
 	allow $1 system_dbusd_runtime_t:sock_file { connectto read write };
 	# Allow all user domains to connect to session bus socket  
 	allow $1 session_dbusd_runtime_t:sock_file { connectto read write };
