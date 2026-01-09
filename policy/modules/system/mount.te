@@ -71,6 +71,30 @@ kernel_dontaudit_write_proc_dirs(mount_t)
 # To load binfmt_misc kernel module
 kernel_request_load_module(mount_t)
 
+# Allow mount_t to read var_lib directories and files
+# This is needed when systemd services run in mount_t context during early boot
+# or when domain transitions haven't occurred yet
+gen_require(`
+	type var_lib_t;
+	type systemd_logind_var_lib_t;
+	type systemd_rfkill_var_lib_t;
+	type systemd_coredump_var_lib_t;
+	type ntp_drift_t;
+	type bluetooth_var_lib_t;
+')
+# Allow reading var_lib directories and files
+allow mount_t var_lib_t:dir { getattr read search };
+allow mount_t var_lib_t:file { getattr map open read };
+# Allow reading systemd service directories
+allow mount_t systemd_logind_var_lib_t:dir { getattr read search };
+allow mount_t systemd_rfkill_var_lib_t:dir { getattr read search };
+allow mount_t systemd_coredump_var_lib_t:dir { getattr read search };
+# Allow reading ntp_drift_t directory (for timesyncd)
+allow mount_t ntp_drift_t:dir { getattr read search };
+# Allow reading bluetooth directories and files
+allow mount_t bluetooth_var_lib_t:dir { getattr read search };
+allow mount_t bluetooth_var_lib_t:file { getattr map open read };
+
 # required for mount.smbfs
 corecmd_exec_bin(mount_t)
 

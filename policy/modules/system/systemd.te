@@ -1129,14 +1129,6 @@ fs_manage_tmpfs_files(systemd_logind_t)
 # The parent directories (/var/lib/systemd) should be created by init or systemd-tmpfiles first
 # Allow creating and managing parent directories if they don't exist yet
 gen_require(`
-	type var_lib_t;
-	type init_var_lib_t;
-')
-# Allow creating parent directories on tmpfs if needed
-# When /var/lib is on tmpfs, we need to create /var/lib/systemd/linger
-# The parent directories should be created by init or systemd-tmpfiles, but if they don't exist,
-# we need to allow creating them. Use filetrans_pattern for intermediate directories.
-gen_require(`
 	type tmpfs_t;
 	type var_lib_t;
 	type init_var_lib_t;
@@ -1146,8 +1138,15 @@ allow systemd_logind_t tmpfs_t:dir { add_name create_dir_perms getattr ioctl loc
 # Allow creating /var/lib and /var/lib/systemd on tmpfs if they don't exist
 filetrans_pattern(systemd_logind_t, tmpfs_t, var_lib_t, dir, "lib")
 filetrans_pattern(systemd_logind_t, var_lib_t, init_var_lib_t, dir, "systemd")
-# Then create the service-specific directory
+# Allow creating directories in /var/lib/systemd (for STATE_DIRECTORY, etc.)
+# This is needed for systemd-logind to create its state directory
+allow systemd_logind_t init_var_lib_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
+# Allow creating subdirectories in /var/lib/systemd/logind (STATE_DIRECTORY)
+# Use filetrans_pattern to create the logind subdirectory, then fs_tmpfs_filetrans for state
+filetrans_pattern(systemd_logind_t, init_var_lib_t, systemd_logind_var_lib_t, dir, "logind")
+# Then create the service-specific directories (for linger, state, etc.)
 fs_tmpfs_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir, "linger")
+fs_tmpfs_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir, "state")
 
 manage_fifo_files_pattern(systemd_logind_t, systemd_logind_runtime_t, systemd_logind_runtime_t)
 manage_files_pattern(systemd_logind_t, systemd_logind_runtime_t, systemd_logind_runtime_t)
@@ -1196,6 +1195,7 @@ domain_obj_id_change_exemption(systemd_logind_t)
 files_check_write_runtime_dirs(systemd_logind_t)
 files_read_etc_runtime_files(systemd_logind_t)
 files_search_runtime(systemd_logind_t)
+files_search_var_lib(systemd_logind_t)
 # Getattr all shm segments as part of cleaning up the
 # segments of deleted ephemeral users.
 files_getattr_all_tmpfs_files(systemd_logind_t)
