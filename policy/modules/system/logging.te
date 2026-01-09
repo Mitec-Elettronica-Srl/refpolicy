@@ -578,6 +578,11 @@ userdom_dontaudit_use_unpriv_user_fds(syslogd_t)
 userdom_dontaudit_search_user_home_dirs(syslogd_t)
 
 ifdef(`init_systemd',`
+	gen_require(`
+		type init_runtime_t;
+		type systemd_journal_t;
+		type var_t;
+	')
 	# for systemd-journal
 	allow syslogd_t self:netlink_audit_socket connected_socket_perms;
 	allow syslogd_t self:capability2 audit_read;
@@ -624,16 +629,12 @@ ifdef(`init_systemd',`
 
 	# Allow creating /run/log directory and journal subdirectory
 	# Also handle /var/log/journal when /var/log is a symlink to volatile/log on tmpfs
-	gen_require(`
-		type var_log_t;
-		type systemd_journal_t;
-		type init_runtime_t;
-		type var_t;
-	')
+	# var_log_t is defined in this module (line 100), var_t comes from files_search_var
+	# gen_require for init_runtime_t, systemd_journal_t, var_t is already at top of ifdef block
 	# First, ensure we can search /run to create /run/log
 	files_search_runtime(syslogd_t)
 	allow syslogd_t init_runtime_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
-	# Allow searching /var to follow symlinks (e.g., /var/log symlink to /volatile/log)
+	# Allow searching /var to follow symlinks
 	files_search_var(syslogd_t)
 	allow syslogd_t var_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
 	# Allow creating /run/log as var_log_t
@@ -644,12 +645,10 @@ ifdef(`init_systemd',`
 	fs_search_tmpfs(syslogd_t)
 	fs_manage_tmpfs_dirs(syslogd_t)
 	fs_manage_tmpfs_files(syslogd_t)
-	# Allow creating /var/log/journal on tmpfs (when /var/log symlink points to /volatile/log on tmpfs)
-	# The symlink resolution means we're actually creating in /volatile/log/journal on tmpfs
-	# First create the parent directory /volatile/log as var_log_t, then journal subdirectory
+	# Allow creating /var/log/journal on tmpfs
 	fs_tmpfs_filetrans(syslogd_t, var_log_t, dir, "log")
 	fs_tmpfs_filetrans(syslogd_t, systemd_journal_t, dir, "journal")
-	# Ensure syslogd_t can access journal directories that may already exist (both /run/log/journal and /var/log/journal)
+	# Ensure syslogd_t can access journal directories that may already exist
 	allow syslogd_t systemd_journal_t:dir { add_name create_dir_perms getattr ioctl lock open read remove_name search setattr watch write };
 	allow syslogd_t systemd_journal_t:file { append create_file_perms getattr ioctl lock map open read setattr unlink watch write };
 
